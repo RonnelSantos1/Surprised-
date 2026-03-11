@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Ashley</title>
+<style>
+body {
+  margin:0;
+  height:100vh;
+  overflow:hidden;
+  background: linear-gradient(#e8ffe8,#b7f7c5);
+  font-family: 'Segoe UI', sans-serif;
+  position: relative;
+}
+
+/* SURPRISE BUTTON - BIRTHDAY STYLE */
+#surpriseBtn {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  padding:20px 50px;
+  font-size:30px;
+  font-weight:bold;
+  background: linear-gradient(45deg, #FF3E4D, #FFB400, #32FF7E, #18DCFF, #9D00FF);
+  background-size: 300% 300%;
+  color:white;
+  border:none;
+  border-radius:15px;
+  cursor:pointer;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3), 0 0 10px rgba(255,255,255,0.5) inset;
+  z-index:100;
+  transition: transform 0.3s ease, background-position 1.5s ease;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  animation: gradientShift 3s ease infinite;
+}
+
+/* Gradient moving animation */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Hover effect */
+#surpriseBtn:hover {
+  transform: translate(-50%,-50%) scale(1.1) rotate(-2deg);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 0 20px rgba(255,255,255,0.7) inset;
+}
+
+/* MESSAGE */
+#message {
+  position:absolute;
+  top:40px;
+  width:100%;
+  text-align:center;
+}
+
+.line1 {
+  font-size:60px;
+  font-weight:bold;
+  color:#2e8b57;
+  letter-spacing:6px;
+  text-shadow:0 3px 10px rgba(0,0,0,0.2);
+}
+
+.line2 {
+  font-size:80px;
+  font-weight:bold;
+  color:#1e7a46;
+  letter-spacing:8px;
+  margin-top:10px;
+  text-shadow:0 3px 10px rgba(0,0,0,0.2);
+}
+
+.letter {
+  opacity:0;
+}
+
+/* BALLOON */
+.balloon {
+  position:absolute;
+  width:70px;
+  height:90px;
+  background: radial-gradient(circle at 30% 30%, #a8ffbf, #2ecc71);
+  border-radius:50% 50% 45% 45%;
+  transform-origin: center bottom;
+  z-index:2;
+}
+
+/* shine */
+.balloon::before {
+  content:"";
+  position:absolute;
+  width:20px;
+  height:30px;
+  background: rgba(255,255,255,0.5);
+  border-radius:50%;
+  top:15px;
+  left:15px;
+}
+
+/* knot */
+.balloon::after {
+  content:"";
+  position:absolute;
+  bottom:-8px;
+  left:50%;
+  transform:translateX(-50%);
+  border-left:6px solid transparent;
+  border-right:6px solid transparent;
+  border-top:10px solid #2ecc71;
+}
+
+/* string sway */
+.string {
+  position:absolute;
+  width:2px;
+  height:40px;
+  background:#444;
+  bottom:-40px;
+  left:50%;
+  transform-origin: top center;
+  animation: stringSway 2s ease-in-out infinite;
+}
+
+@keyframes stringSway {
+  0% { transform: rotate(-5deg); }
+  10% { transform: rotate(6deg); }
+  20% { transform: rotate(-4deg); }
+  30% { transform: rotate(5deg); }
+  40% { transform: rotate(-3deg); }
+  50% { transform: rotate(4deg); }
+  60% { transform: rotate(-2deg); }
+  70% { transform: rotate(3deg); }
+  80% { transform: rotate(-1deg); }
+  90% { transform: rotate(2deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* subtle sway for frame balloons */
+@keyframes frameBalloonSway {
+  0% { transform: translateX(0px); }
+  25% { transform: translateX(3px); }
+  50% { transform: translateX(0px); }
+  75% { transform: translateX(-3px); }
+  100% { transform: translateX(0px); }
+}
+
+/* balloon realistic pop */
+@keyframes balloonExplode {
+  0% { transform: scale(1,1) rotate(0deg); opacity:1; }
+  20% { transform: scale(1.6,0.8) rotate(-10deg); }
+  40% { transform: scale(0.2,2) rotate(15deg); }
+  60% { transform: scale(1.4,0.3) rotate(-20deg); }
+  80% { transform: scale(0.1,1.5) rotate(10deg); }
+  100% { transform: scale(0) rotate(30deg); opacity:0; }
+}
+
+/* fragments */
+.fragment {
+  position:absolute;
+  background: #2ecc71;
+  opacity:1;
+  pointer-events:none;
+  animation: flyAway 0.8s forwards;
+  border-radius:50%;
+}
+
+@keyframes flyAway {
+  to {
+    transform: translate(var(--x), var(--y)) rotate(var(--rot)) scale(0);
+    opacity:0;
+  }
+}
+
+/* FRAME CONTAINER FOR SLIDING UP */
+#frameContainer {
+  position: absolute;
+  bottom: -300px; /* start below screen */
+  left: 50%;
+  transform: translateX(-50%);
+  transition: bottom 7s ease-out; /* slow slide up */
+  z-index:1;
+}
+
+/* Picture frame */
+#frame {
+  width: 250px;
+  height: 200px;
+  border: 6px solid #2e8b57;
+  border-radius: 15px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  overflow: visible;
+  position: relative;
+}
+
+#frame img {
+  width: 90%;
+  height: 90%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* ========== NEW ADDITIONS ========== */
+
+/* Continuous background confetti */
+.confetti-bg {
+  position:absolute;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  opacity:0.8;
+  pointer-events:none;
+  top:-10px;
+  z-index:0;
+  animation: fall 5s linear infinite;
+}
+
+@keyframes fall {
+  to { transform: translateY(100vh) rotate(360deg); opacity:0; }
+}
+
+/* Frame lights */
+.light {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: yellow;
+  border-radius: 50%;
+  box-shadow: 0 0 10px yellow;
+  animation: flicker 1.5s infinite alternate;
+}
+
+@keyframes flicker {
+  from { opacity: 0.3; transform: scale(0.7);}
+  to { opacity: 1; transform: scale(1.2);}
+}
+
+/* Sparkles */
+.sparkle {
+  position:absolute;
+  width:6px;
+  height:6px;
+  background:white;
+  border-radius:50%;
+  opacity:0.9;
+  pointer-events:none;
+  box-shadow: 0 0 8px white;
+  animation: sparkleAnim 1s infinite alternate;
+}
+
+@keyframes sparkleAnim {
+  from { transform: scale(0.5); opacity:0.3; }
+  to { transform: scale(1.2); opacity:1; }
+}
+</style>
+</head>
+<body>
+
+<!-- SURPRISE BUTTON -->
+<button id="surpriseBtn">Click for Surprise🎉</button>
+
+<div id="message">
+  <div id="line1" class="line1"></div>
+  <div id="line2" class="line2"></div>
+</div>
+
+<!-- FRAME WITH BALLOONS WRAPPER -->
+<div id="frameContainer">
+  <div id="frame">
+    <img src="ashley.jpg" alt="Ashley" />
+  </div>
+</div>
+
+<script>
+const firstLine = "Happy Birthday";
+const secondLine = "Ashley";
+
+const line1 = document.getElementById("line1");
+const line2 = document.getElementById("line2");
+
+/* create letter spans */
+[firstLine, secondLine].forEach((line, idx)=>{
+  const parent = idx===0? line1: line2;
+  line.split("").forEach(l=>{
+    const span = document.createElement("span");
+    span.textContent = l;
+    span.className="letter";
+    parent.appendChild(span);
+  });
+});
+
+const letters1 = line1.querySelectorAll(".letter");
+const letters2 = line2.querySelectorAll(".letter");
+let index=0;
+
+/* create realistic fragments */
+function createFragments(x,y,count=20){
+  for(let i=0;i<count;i++){
+    const frag = document.createElement("div");
+    frag.className="fragment";
+    const size = Math.random()*15 +10; 
+    frag.style.width = size+"px";
+    frag.style.height = size+"px";
+    frag.style.left = x+"px";
+    frag.style.top = y+"px";
+
+    const angle = Math.random()*2*Math.PI;
+    const radius = 30 + Math.random()*40;
+    const rot = Math.random()*720 + "deg";
+    frag.style.setProperty('--x', radius*Math.cos(angle)+"px");
+    frag.style.setProperty('--y', radius*Math.sin(angle)+"px");
+    frag.style.setProperty('--rot', rot);
+
+    if(Math.random()<0.3){
+      frag.style.borderRadius="50% 30% 50% 30%";
+    }
+
+    document.body.appendChild(frag);
+    setTimeout(()=>frag.remove(),800);
+  }
+}
+
+/* create balloon */
+function createBalloon(letterArray,callback){
+  if(index>=letterArray.length){
+    index=0;
+    if(callback) setTimeout(callback,800);
+    return;
+  }
+  const letter = letterArray[index];
+  const rect = letter.getBoundingClientRect();
+
+  const balloon = document.createElement("div");
+  balloon.className="balloon";
+
+  const string = document.createElement("div");
+  string.className="string";
+  balloon.appendChild(string);
+
+  const left = rect.left + rect.width/2 -35;
+  balloon.style.left = left+"px";
+  balloon.style.bottom = "-120px";
+  document.body.appendChild(balloon);
+
+  const targetBottom = window.innerHeight - rect.top - rect.height/2 - 45;
+  const duration = 2000;
+  let start = null;
+
+  function animate(time){
+    if(!start) start=time;
+    const elapsed = time-start;
+    const progress = Math.min(elapsed/duration,1);
+    balloon.style.bottom = (-120 + (targetBottom+120)*progress)+"px";
+
+    if(progress<1){
+      requestAnimationFrame(animate);
+    } else {
+      letter.style.opacity=1;
+      const balloonRect = balloon.getBoundingClientRect();
+      const fragX = balloonRect.left + balloonRect.width/2;
+      const fragY = balloonRect.top + balloonRect.height/2;
+      balloon.style.animation="balloonExplode 0.6s forwards";
+      setTimeout(()=>createFragments(fragX, fragY,25),100);
+      setTimeout(()=>{
+        balloon.remove();
+        index++;
+        createBalloon(letterArray,callback);
+      },600);
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+/* start frame slide */
+function startFrameSlide(){
+  const frameContainer = document.getElementById("frameContainer");
+  frameContainer.style.bottom = "50px"; // final position
+  spawnConfettiBg(200); // background confetti
+  createFloatingBalloons(10); // mini balloons
+  addFrameLights();
+  spawnSparkles(50); // twinkling sparkles
+}
+
+/* FRAME BALLOONS CONNECTED */
+function attachFrameBalloons(){
+  const frame = document.getElementById("frame");
+  const balloonCount = 7;
+
+  for(let i=0;i<balloonCount;i++){
+    const balloon = document.createElement("div");
+    balloon.className="balloon";
+
+    const string = document.createElement("div");
+    string.className="string";
+    string.style.animation = "none";
+    balloon.appendChild(string);
+    frame.appendChild(balloon);
+
+    const spacing = frame.offsetWidth / (balloonCount + 1);
+    balloon.style.left = spacing*(i+1) - 35 + "px";
+
+    string.style.height = "30px";
+    string.style.bottom = "-36px";
+
+    balloon.style.bottom = frame.offsetHeight + 30 + "px"; 
+
+    balloon.style.animation = `frameBalloonSway ${2 + Math.random()}s ease-in-out infinite`;
+  }
+}
+
+attachFrameBalloons();
+
+/* Animate lines */
+function animateLines(){
+  createBalloon(letters1, ()=>{
+    createBalloon(letters2, ()=>{
+      startFrameSlide();
+    });
+  });
+}
+
+/* ========== NEW FUNCTIONS ========== */
+
+/* Continuous confetti background */
+function spawnConfettiBg(count=100){
+  const colors = ['#FF3E4D','#FFB400','#32FF7E','#18DCFF','#9D00FF','#FFFFFF'];
+  for(let i=0;i<count;i++){
+    const c = document.createElement("div");
+    c.className = "confetti-bg";
+    c.style.left = Math.random()*window.innerWidth + "px";
+    c.style.width = c.style.height = (5 + Math.random()*10) + "px";
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDuration = (3 + Math.random()*5) + "s";
+    document.body.appendChild(c);
+    setInterval(()=>{
+      c.style.left = Math.random()*window.innerWidth + "px";
+    }, 5000);
+  }
+}
+
+/* Frame lights */
+function addFrameLights(){
+  const frame = document.getElementById("frame");
+  const total = 20;
+  for(let i=0;i<total;i++){
+    const light = document.createElement("div");
+    light.className = "light";
+    const angle = (i/total)*Math.PI*2;
+    light.style.left = frame.offsetWidth/2 + Math.cos(angle)*frame.offsetWidth/2 + "px";
+    light.style.top = frame.offsetHeight/2 + Math.sin(angle)*frame.offsetHeight/2 + "px";
+    frame.appendChild(light);
+  }
+}
+
+/* Floating mini balloons */
+function createFloatingBalloons(count=5){
+  for(let i=0;i<count;i++){
+    const b = document.createElement("div");
+    b.className="balloon";
+    b.style.width = b.style.height = (20 + Math.random()*30) + "px";
+    b.style.left = Math.random()*window.innerWidth + "px";
+    b.style.bottom = "-50px";
+    b.style.background = `radial-gradient(circle at 30% 30%, #${Math.floor(Math.random()*16777215).toString(16)}, #2ecc71)`;
+    document.body.appendChild(b);
+
+    const duration = 5 + Math.random()*5;
+    b.animate([{bottom: "-50px"}, {bottom: window.innerHeight + 50 + "px"}], {
+      duration: duration*1000,
+      iterations: Infinity
+    });
+  }
+}
+
+/* Twinkling sparkles */
+function spawnSparkles(count=30){
+  for(let i=0;i<count;i++){
+    const s = document.createElement("div");
+    s.className="sparkle";
+    s.style.left = Math.random()*window.innerWidth + "px";
+    s.style.top = Math.random()*window.innerHeight + "px";
+    document.body.appendChild(s);
+
+    const duration = 1 + Math.random()*2;
+    s.animate([{opacity:0.3},{opacity:1}],{
+      duration: duration*1000,
+      iterations: Infinity,
+      direction:'alternate'
+    });
+  }
+}
+
+/* ========== BUTTON CLICK ========= */
+document.getElementById("surpriseBtn").addEventListener("click",()=>{
+  document.getElementById("surpriseBtn").remove();
+  animateLines();
+});
+</script>
+</body>
+  </html>
